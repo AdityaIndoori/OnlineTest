@@ -19,12 +19,18 @@
     <!-- Custom styles for this template -->
     <link href="/css/confirm.css" rel="stylesheet">
     <script type="text/javascript" src="/js/confirm.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            var testId = /*[[${testId}]]*/ 0;
+            var remainingTime = /*[[${remainingTime}]]*/ 120;
+            /*]]>*/
+    </script>
 
 </head>
 <body>
     <div class="text-center" id="formDiv">
         <form id="confirmForm" th:action="@{result}"  method="post">
-            <div ><p class="display-4">User:</p><span id="userName" th:value="${userName}"></span></div><br>
+            <div ><p class="display-4">User: <span id="userName" th:text="${userName}"></span></p></div><br>
             <div><p class="display-4">Time remaining:</p><span id="remainingTimeDisp"></span></div><br>
             <input id="testId" name="testId" type="hidden" th:value="${testId}" >
             <input id="remainingTime" name="remainingTime" type="hidden" th:value="${remainingTime}">

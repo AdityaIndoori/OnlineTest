@@ -1,3 +1,9 @@
+const NavigateTo = {
+    NEXT: 'NEXT',
+    PREV: 'PREV',
+    CUST: 'CUST'
+}
+
 function startTimer(duration, display) {
     try{
         var timer = parseInt(duration);
@@ -7,6 +13,7 @@ function startTimer(duration, display) {
                 seconds = ("0" + timer%60).slice(-2);
                 display.textContent = minutes+":"+seconds;
                 document.getElementById("remainingTime").value = timer;
+                remainingTime = timer
                 if (--timer < 0) {
                     //TODO: Call the timeOut method in Java
                 }
@@ -19,6 +26,15 @@ function startTimer(duration, display) {
 function navigateToQuestion(quesNum){
     //Todo: Navigate to the clicked question by sending a post request to question() method with the given question number.
     console.log("Question Number : " + quesNum);
+    var navigateTo = NavigateTo.CUST
+
+    postAsForm('question', 'post', {
+                                       currentQuestionIndex: quesNum-1,
+                                       selectedOption: null,
+                                       testId: testId,
+                                       remainingTime: remainingTime,
+                                       navigateTo: navigateTo
+                                   });
 }
 
 function postAsForm(action, method, input) {

@@ -1,3 +1,9 @@
+const NavigateTo = {
+    NEXT: 'NEXT',
+    PREV: 'PREV',
+    CUST: 'CUST'
+}
+
 function startTimer(duration, display) {
     try{
         var timer = parseInt(duration);
@@ -7,6 +13,7 @@ function startTimer(duration, display) {
                 seconds = timer%60;
                 display.textContent = minutes+":"+seconds;
                 document.getElementById("remainingTime").value = timer;
+                remainingTime = timer
                 if (--timer < 0) {
                     //TODO: Call the timeOut method in Java
                 }
@@ -18,20 +25,40 @@ function startTimer(duration, display) {
 }
 
 function clickedNextButton(){
-    alert("Clicked Next Button");
-    //todo: post correct stuff
+    var selectedOption = $("input[name='option']:checked").val()
+    var navigateTo = NavigateTo.NEXT
+    console.log("Current question index: "+currentQuestionIndex);
+    console.log("Test ID: "+testId)
+    console.log("Remaining Time: "+remainingTime)
+    console.log("Selected Option: "+selectedOption )
+    console.log("Navigate To: "+navigateTo)
+
+
     postAsForm('question', 'post', {
-                                       name: 'Aditya',
-                                       age: 24
+                                       currentQuestionIndex: currentQuestionIndex,
+                                       selectedOption: selectedOption,
+                                       testId: testId,
+                                       remainingTime: remainingTime,
+                                       navigateTo: navigateTo
                                    });
 }
 
 function clickedPrevButton(){
-    alert("Clicked Previous Button");
-    //todo: post correct stuff
+    var selectedOption = $("input[name='option']:checked").val()
+    var navigateTo = NavigateTo.PREV
+    console.log("Current question index: "+currentQuestionIndex);
+    console.log("Test ID: "+testId)
+    console.log("Remaining Time: "+remainingTime)
+    console.log("Selected Option: "+selectedOption )
+    console.log("Navigate To: "+navigateTo)
+
+
     postAsForm('question', 'post', {
-                                       name: 'Aditya',
-                                       age: 24
+                                       currentQuestionIndex: currentQuestionIndex,
+                                       selectedOption: selectedOption,
+                                       testId: testId,
+                                       remainingTime: remainingTime,
+                                       navigateTo: navigateTo
                                    });
 }
 
@@ -55,9 +82,38 @@ function postAsForm(action, method, input) {
     form.appendTo('body').submit();
 }
 
+function onPageRefresh(){
+        var navigateTo = NavigateTo.CUST
+
+        postAsForm('question', 'post', {
+                                           currentQuestionIndex: currentQuestionIndex,
+                                           selectedOption: existingSelectedOption,
+                                           testId: testId,
+                                           remainingTime: remainingTime,
+                                           navigateTo: navigateTo
+                                       });
+
+       return 'Page Refreshed';
+}
+
+function clickedConfirmButton(){
+    postAsForm('confirm', 'post', { userName: userName, testId: testId, remainingTime: remainingTime });
+}
+
 window.onload = function () {
     var timeRem = document.getElementById("remainingTime").value;
-
     display = document.getElementById("remainingTimeDisp");
     startTimer(timeRem, display);
+    console.log("existingSelectedOption: "+existingSelectedOption);
+    //Setting the radio button to the option previously selected by the user
+    if(existingSelectedOption==0)
+        $("#o1").prop("checked", true);
+    else if(existingSelectedOption==1)
+        $("#o2").prop("checked", true);
+    else if(existingSelectedOption==2)
+        $("#o3").prop("checked", true);
+    else if(existingSelectedOption==3)
+        $("#o4").prop("checked", true);
 };
+
+window.onbeforeunload = onPageRefresh();
