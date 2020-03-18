@@ -1,11 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Question</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Custom styles for this template -->
+    <link href="css/question.css" rel="stylesheet">
     <script type="text/javascript" src="/js/question.js"></script>
+
 </head>
 <body>
-Question
+<form id="questionForm" th:action="@{timeup}"  method="post">
+    <div>User:<span id="userName" th:text="${userName}"></span></div><br>
+    <input id="remainingTime" name="remainingTime" type="hidden" th:value="${remainingTime}" >
+    <input id="testId" name="testId" type="hidden" th:value="${testId}" >
+    <div>Time remaining:<span id="remainingTimeDisp"></span></div><br>
+
+    <p><span th:text="${questionIndex}+1 + ') ' + ${question} + '( Of ' + ${totalQuestions} + ' questions)'"></span></p>
+    <input type="radio" id="o1" name="option" value="1" >
+    <label for="o1"><span th:text="${option1}"></span></label><br>
+
+    <input type="radio" id="o2" name="option" value="2" >
+    <label for="o2"><span th:text="${option2}"></span></label><br>
+
+    <input type="radio" id="o3" name="option" value="3" >
+    <label for="o3"><span th:text="${option3}"></span></label><br>
+
+    <input type="radio" id="o4" name="option" value="4" >
+    <label for="o4"><span th:text="${option4}"></span></label><br>
+
+    <br>
+
+    <input type="button" id="prevButton" value="previous" class="btn btn-default" onclick="clickedPrevButton()">
+
+    <input type="button" id="nextButton" value="next" class="btn btn-default" onclick="clickedNextButton()">
+</form>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
 </body>
 </html>

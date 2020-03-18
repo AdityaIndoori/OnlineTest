@@ -1,11 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script type="text/javascript" src="/js/welcome.js"></script>
+    <title>Welcome</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="css/welcome.css" rel="stylesheet">
+
 </head>
+
 <body>
-Welcome
+
+    <h1 class="cover-heading">Online Test</h1>
+    <br>
+    <form class="form-inline" method="post" th:action="@{begintest}">
+        <div class="form-group">
+            <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter your name" required>
+        </div>
+        <button type="submit" class="btn btn-default">Begin Test</button>
+    </form>
 </body>
 </html>

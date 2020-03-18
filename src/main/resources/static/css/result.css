@@ -1,0 +1,17 @@
+html,
+body {
+  height: 100%;
+  background-color: #333;
+}
+
+body {
+  color: #fff;
+  padding:20px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+}
+
+table {
+    width: inherit !important;
+    margin-left:auto;
+    margin-right:auto;
+}
