@@ -21,4 +21,13 @@ public class TestRecord {
     private Integer timeTaken;
     private Integer correctQuestions;
     private Double percentage;
+
+    public TestRecord(){
+        this.userName = null;
+        this.questionIdList = null;
+        this.selectedOptionList = null;
+        this.timeTaken = 0;
+        this.correctQuestions = 0;
+        this.percentage = 0.0;
+    }
 }

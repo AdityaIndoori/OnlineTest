@@ -16,12 +16,12 @@ function startTimer(duration, display) {
                 remainingTime = timer
                 if (--timer < 0) {
                     //TODO: Call the timeOut method in Java
+                    postAsForm('result', 'get', null);
                 }
             }, 1000);
     }catch(err){
         alert("Timer error: " + err);
     }
-
 }
 
 function clickedNextButton(){
@@ -32,7 +32,6 @@ function clickedNextButton(){
     console.log("Remaining Time: "+remainingTime)
     console.log("Selected Option: "+selectedOption )
     console.log("Navigate To: "+navigateTo)
-
 
     postAsForm('question', 'post', {
                                        currentQuestionIndex: currentQuestionIndex,
@@ -82,26 +81,6 @@ function postAsForm(action, method, input) {
     form.appendTo('body').submit();
 }
 
-function onPageRefresh(){
-        /*<![CDATA[*/
-                var currentQuestionIndex = /*[[${questionIndex}]]*/ 0;
-                var testId = /*[[${testId}]]*/ 0;
-                var remainingTime = /*[[${remainingTime}]]*/ 120;
-                var existingSelectedOption = /*[[${existingSelectedOption}]]*/ null;
-                var userName = /*[[${userName}]]*/ "";
-        /*]]>*/
-        var navigateTo = NavigateTo.CUST;
-        alert("Refreshing!");
-        postAsForm('question', 'post', {
-                                           currentQuestionIndex: currentQuestionIndex,
-                                           selectedOption: existingSelectedOption,
-                                           testId: testId,
-                                           remainingTime: remainingTime,
-                                           navigateTo: navigateTo
-                                       });
-       return 'Page Refreshed';
-}
-
 function clickedConfirmButton(){
     postAsForm('confirm', 'post', { userName: userName, testId: testId, remainingTime: remainingTime });
 }
@@ -121,5 +100,3 @@ window.onload = function () {
     else if(existingSelectedOption==3)
         $("#o4").prop("checked", true);
 };
-
-//window.onbeforeunload = onPageRefresh();

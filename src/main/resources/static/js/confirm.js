@@ -16,6 +16,7 @@ function startTimer(duration, display) {
                 remainingTime = timer
                 if (--timer < 0) {
                     //TODO: Call the timeOut method in Java
+                    postAsForm('result', 'get', null);
                 }
             }, 1000);
     }catch(err){

@@ -71,7 +71,6 @@ public class MainController {
         newTestRecord.setSelectedOptionList(selectedOptionList);
         //SAVE TO DATABASE
         TestRecord testRecord = testRepo.save(newTestRecord);
-        log.info("Database Record: " + testRecord.toString());
         //Get the first question record
         QuestionRecord firstQuestionRecord = questionRepo.getOne(testRecord.getQuestionIdList().get(firstQuestionIndex));
         //Add attributes to HTML
@@ -97,6 +96,9 @@ public class MainController {
 
     @GetMapping("question")
     public String question(Model model) {
+        //If time runs out, always show the results page:
+        if(remainingTimeMapBean.get(testBean.getTestId())<0)
+            return "redirect:result";
         //Get testRecord:
         TestRecord testRecord = testRepo.getOne(testBean.getTestId());
         //Pause the countDown timer
@@ -107,9 +109,6 @@ public class MainController {
         QuestionRecord newQuestionRecord = questionRepo.getOne(currentQuestionId);
         //Get existingSelectedOption:
         Integer existingSelectedOption = testRecord.getSelectedOptionList().get(testBean.getCurrentQuestionIndex());
-        //Log to check if the reamining time is indeed updated:
-        log.info("GET QUESTION Remaining Time: "+ remainingTimeMapBean.get(testRecord.getTestId())/60+":"+ remainingTimeMapBean.get(testRecord.getTestId())%60);
-        log.info("GET QUESTION TestBean toString: "+ testBean.toString());
         //Add attributes to HTML
         model.addAttribute("userName", testRecord.getUserName());
         model.addAttribute("remainingTime", remainingTimeMapBean.get(testRecord.getTestId()));
@@ -199,8 +198,7 @@ public class MainController {
             }
             //END
         }
-        //todo: properly implement question method
-        log.info("currentQuestionIndex: "+currentQuestionIndex + " selectedOption: "+selectedOption + " testId: "+testId + "remainingTime: "+remainingTime + "navigateTo: "+navigateTo);
+        //todo: Remove unnecessary stuff from this method such as the model attributes, and unnecessary logic
         //Add attributes to HTML
         model.addAttribute("userName", testRecord.getUserName());
         model.addAttribute("remainingTime", remainingTime);
@@ -240,37 +238,52 @@ public class MainController {
         return "redirect:confirm";
     }
 
-    @PostMapping("result")
-    public String result(Model model, Long testId, Integer remainingTime) {
-        //todo: properly implement result method
+    @GetMapping("result")
+    public String result(Model model){
+        //Stop the countDown for the current test:
+        pauseCountDown(testBean.getTestId());
         //Get the testRecord:
-        TestRecord testRecord = testRepo.getOne(testId);
-        Integer timeTaken = totalTime - remainingTime;
+        TestRecord testRecord = testRepo.getOne(testBean.getTestId());
+        //Get the totalTimeTaken:
+        Integer timeTaken = totalTime - remainingTimeMapBean.get(testRecord.getTestId()) -1;
+        //Set the testRecords totalTimeTaken:
         testRecord.setTimeTaken(timeTaken);
-        Integer correctAnswers = 0;
+        //Initalize the number of correctly answered questions
+        Integer correctQuestions = 0;
+        //Get list of question IDs for the current test:
         List<Long> questionIdList = testRecord.getQuestionIdList();
+        //Get list of selected options:
         List<Integer> selectedOptionList = testRecord.getSelectedOptionList();
+        //Increase the correctly answered questions:
         for (int i = 0; i < totalQuestions; i++){
             if(questionRepo.getOne(questionIdList.get(i)).getCorrect().equals(selectedOptionList.get(i)))
-                correctAnswers++;
+                correctQuestions++;
         }
-        testRecord.setCorrectQuestions(correctAnswers);
+        //Set the test record's correctly answered question to the one just calculated:
+        testRecord.setCorrectQuestions(correctQuestions);
+        //Calculate the percentage:
         DecimalFormat df = new DecimalFormat("0.00");
-        Double percentage = Double.valueOf(df.format(((double)correctAnswers/(double)totalQuestions)*100));
+        Double percentage = Double.valueOf(df.format(((double)correctQuestions/(double)totalQuestions)*100));
+        //Set the percentage for the test record:
         testRecord.setPercentage(percentage);
+        //Save the test record to the db:
         testRecord = testRepo.save(testRecord);
+        //Add HTMl model attributes:
         model.addAttribute("userName", testRecord.getUserName());
         model.addAttribute("timeTaken", testRecord.getTimeTaken());
         model.addAttribute("correctAnswers", testRecord.getCorrectQuestions());
         model.addAttribute("totalQuestions", totalQuestions);
         model.addAttribute("percentage", testRecord.getPercentage());
-        pauseCountDown(testId);
         return "result";
+    }
+
+    @PostMapping("result")
+    public String result() {
+        return "redirect:result";
     }
 
     private void decreaseRemainingTime(Long testId) {
         remainingTimeMapBean.put(testId, remainingTimeMapBean.get(testId)-1);
-        log.info("The remaining time for TestId: "+testId+" is: "+ remainingTimeMapBean.get(testId)/60+":"+ remainingTimeMapBean.get(testId)%60);
     }
 
     public void beginCountDown(Long testId){
