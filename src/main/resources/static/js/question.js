@@ -83,8 +83,15 @@ function postAsForm(action, method, input) {
 }
 
 function onPageRefresh(){
-        var navigateTo = NavigateTo.CUST
-
+        /*<![CDATA[*/
+                var currentQuestionIndex = /*[[${questionIndex}]]*/ 0;
+                var testId = /*[[${testId}]]*/ 0;
+                var remainingTime = /*[[${remainingTime}]]*/ 120;
+                var existingSelectedOption = /*[[${existingSelectedOption}]]*/ null;
+                var userName = /*[[${userName}]]*/ "";
+        /*]]>*/
+        var navigateTo = NavigateTo.CUST;
+        alert("Refreshing!");
         postAsForm('question', 'post', {
                                            currentQuestionIndex: currentQuestionIndex,
                                            selectedOption: existingSelectedOption,
@@ -92,7 +99,6 @@ function onPageRefresh(){
                                            remainingTime: remainingTime,
                                            navigateTo: navigateTo
                                        });
-
        return 'Page Refreshed';
 }
 
@@ -116,4 +122,4 @@ window.onload = function () {
         $("#o4").prop("checked", true);
 };
 
-window.onbeforeunload = onPageRefresh();
+//window.onbeforeunload = onPageRefresh();
