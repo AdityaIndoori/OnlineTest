@@ -26,6 +26,8 @@ import java.util.*;
 //TODO: Add answers to the result page
 //TODO: Add logic when time runs out
 public class MainController {
+    @Value("${spring.application.name}")
+    private String ApplicationName;
     @Value("${test.total.questions}")
     private int totalQuestions;
     @Value("${test.total.time}")
@@ -43,7 +45,8 @@ public class MainController {
     private Map<Long, Timer> timerMapBean;
 
     @GetMapping("/")
-    public String welcome() {
+    public String welcome(Model model) {
+        model.addAttribute("ApplicationName", ApplicationName);
         return "welcome";
     }
 
@@ -226,6 +229,7 @@ public class MainController {
         model.addAttribute("userName", testRecord.getUserName());
         model.addAttribute("remainingTime", remainingTimeMapBean.get(testRecord.getTestId()));
         model.addAttribute("testId", testRecord.getTestId());
+        model.addAttribute("totalQuestions", totalQuestions);
         return "confirm";
     }
 
@@ -254,10 +258,45 @@ public class MainController {
         List<Long> questionIdList = testRecord.getQuestionIdList();
         //Get list of selected options:
         List<Integer> selectedOptionList = testRecord.getSelectedOptionList();
+        //Create a List of Wrongly Answered Questions:
+        List<String> wrongQuestionList = new ArrayList<>();
+        //Create a List of Selected Answers for the Wrongly Answered Questions:
+        List<String> selectedAnswerList = new ArrayList<>();
+        //Create a List of Correct Answers for the Wrongly Answred Questions:
+        List<String> correctAnswerList = new ArrayList<>();
+        //Create a questionRecord for checking the correct answer:
+        QuestionRecord questionRecord = null;
         //Increase the correctly answered questions:
         for (int i = 0; i < totalQuestions; i++){
-            if(questionRepo.getOne(questionIdList.get(i)).getCorrect().equals(selectedOptionList.get(i)))
+            //Get the questionRecord:
+            questionRecord = questionRepo.getOne(questionIdList.get(i));
+            //If correctly answered, increase the correctQuestions count:
+            if(questionRecord.getCorrect().equals(selectedOptionList.get(i)))
                 correctQuestions++;
+            else{
+                String wrongQuestion = questionRecord.getQuestion();
+                Integer correctOptionIndex = questionRecord.getCorrect();
+                Integer selectedOptionIndex = selectedOptionList.get(i);
+                String correctAnswer = null;
+                String selectedAnswer = null;
+                switch (correctOptionIndex){
+                    case 0: correctAnswer = questionRecord.getOption1();break;
+                    case 1: correctAnswer = questionRecord.getOption2();break;
+                    case 2: correctAnswer = questionRecord.getOption3();break;
+                    case 3: correctAnswer = questionRecord.getOption4();break;
+                    default: correctAnswer = null;break;
+                }
+                switch (selectedOptionIndex){
+                    case 0: selectedAnswer = questionRecord.getOption1();break;
+                    case 1: selectedAnswer = questionRecord.getOption2();break;
+                    case 2: selectedAnswer = questionRecord.getOption3();break;
+                    case 3: selectedAnswer = questionRecord.getOption4();break;
+                    default: selectedAnswer = null;break;
+                }
+                wrongQuestionList.add(wrongQuestion);
+                selectedAnswerList.add(selectedAnswer);
+                correctAnswerList.add(correctAnswer);
+            }
         }
         //Set the test record's correctly answered question to the one just calculated:
         testRecord.setCorrectQuestions(correctQuestions);
@@ -274,6 +313,9 @@ public class MainController {
         model.addAttribute("correctAnswers", testRecord.getCorrectQuestions());
         model.addAttribute("totalQuestions", totalQuestions);
         model.addAttribute("percentage", testRecord.getPercentage());
+        model.addAttribute("wrongQuestionList", wrongQuestionList);
+        model.addAttribute("selectedAnswerList", selectedAnswerList);
+        model.addAttribute("correctAnswerList", correctAnswerList);
         return "result";
     }
 

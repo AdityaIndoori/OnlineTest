@@ -23,6 +23,7 @@
         /*<![CDATA[*/
             var testId = /*[[${testId}]]*/ 0;
             var remainingTime = /*[[${remainingTime}]]*/ 120;
+            var totalQuestions = /*[[${totalQuestions}]]*/ 10;
             /*]]>*/
     </script>
 
@@ -35,16 +36,8 @@
             <input id="testId" name="testId" type="hidden" th:value="${testId}" >
             <input id="remainingTime" name="remainingTime" type="hidden" th:value="${remainingTime}">
             <h1 class="display-4">Navigate to question:</h1>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(1)">1</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(2)">2</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(3)">3</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(4)">4</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(5)">5</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(6)">6</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(7)">7</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(8)">8</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(9)">9</button>
-            <button type="button" class="btn btn-primary" onclick="navigateToQuestion(10)">10</button>
+            <span id="questionButtonSpace">
+            </span>
             <br><br>
             <button type="submit" class="btn btn-primary">Confirm & Submit</button>
         </form>

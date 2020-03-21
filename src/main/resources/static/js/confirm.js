@@ -58,9 +58,27 @@ function postAsForm(action, method, input) {
     form.appendTo('body').submit();
 }
 
+function addButton(value) {
+  //Create an input type dynamically.
+  var element = document.createElement("input");
+  //Assign different attributes to the element.
+  element.type = "button";
+  element.value = value; // Really? You want the default value to be the type string?
+  element.className = "btn btn-primary"; // And the name too?
+  element.addEventListener("click", function () {navigateToQuestion(value)});
+
+  var buttonSpace = document.getElementById("questionButtonSpace");
+  //Append the element in page (in span).
+  buttonSpace.appendChild(element);
+}
+
 window.onload = function () {
     var timeRem = document.getElementById("remainingTime").value;
 
     display = document.getElementById("remainingTimeDisp");
     startTimer(timeRem, display);
+
+    for(let i = 1; i <= totalQuestions; i++){
+        addButton(i);
+    }
 };

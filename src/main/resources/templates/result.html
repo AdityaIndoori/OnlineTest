@@ -13,8 +13,9 @@
         /*<![CDATA[*/
 
             var timeTaken = /*[[${timeTaken}]]*/ 'default';
-            console.log(timeTaken);
-
+            var wrongQuestionList = /*[[${wrongQuestionList}]]*/ [];
+            var selectedAnswerList = /*[[${selectedAnswerList}]]*/ [];
+            var correctAnswerList = /*[[${correctAnswerList}]]*/ [];
         /*]]>*/
     </script>
 </head>
@@ -45,7 +46,16 @@
         <form action="/" method="get">
             <button type="submit" class="btn btn-primary">Home Page</button>
         </form>
-
+        <br>
+        <table class="table table-bordered table-dark" id="answersTable">
+            <thead>
+                <tr>
+                    <th scope="col">Question</th>
+                    <th scope="col">Selected Option</th>
+                    <th scope="col">Correct Answer</th>
+                </tr>
+            </thead>
+        </table>
     </div>
 </body>
 </html>
