@@ -15,6 +15,10 @@ To auto-reload the front-end (HTML, JS files) do the following:
  4. Restart IDE
  5. Make changes to HTML or JS & force-build (`CTRL+F9`)
  6. Refresh browser to see changes
+ 
+ Note:
+ <br>Use the following url to add file to database from S3:
+ /questionfile?file=filename.txt
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 ## Authors
