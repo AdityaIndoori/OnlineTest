@@ -58,6 +58,8 @@ public class MainController {
         newTestRecord.setUserName(userName);
         //Get list of all questions from database:
         List<QuestionRecord> questionRecordList = questionRepo.findAll();
+        //Total number of questions cant be greater than the available number of questions:
+        totalQuestions = totalQuestions<questionRecordList.size()?totalQuestions:questionRecordList.size();
         //Shuffle the list to pick 10 questions:
         Collections.shuffle(questionRecordList);
         //Add question Ids to TestRecord:
